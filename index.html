@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customer Walks Crocs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-size: 300px;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header {
+      background: linear-gradient(135deg, #84BD00 0%, #c0ff85 100%);
+      color: white;
+      text-align: center;
+      padding: 2rem 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      left: -30%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+      transform: rotate(20deg);
+      z-index: 0;
+    }
+    header h1 {
+      font-family: 'Rubik Mono One', sans-serif;
+      font-size: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: #f9fff2cc;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      backdrop-filter: blur(5px);
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 2rem;
+      width: 100%;
+      background: #84BD00;
+      color: white;
+      border: none;
+      padding: 1rem;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+    button:hover {
+      background: #6ea800;
+    }
+    .payment-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding-left: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Customer Walks Crocs</h1>
+  </header>
+  <div class="container">
+    <form id="orderForm">
+      <label for="name">Nama</label>
+      <input type="text" id="name" required>
+
+      <label for="item">Item</label>
+      <input type="text" id="item" required>
+
+      <label for="color">Warna</label>
+      <input type="text" id="color" required>
+
+      <label for="size">Size</label>
+      <input type="text" id="size" required>
+
+      <label for="address">Alamat</label>
+      <textarea id="address" rows="3" required></textarea>
+
+      <label for="phone">No Telepon</label>
+      <input type="text" id="phone" required>
+
+      <label>Metode Pembayaran</label>
+      <div class="payment-options">
+        <label><input type="radio" name="payment" value="BCA" required> Transfer ke BCA 5776355166</label>
+        <label><input type="radio" name="payment" value="SeaBank"> Transfer ke SeaBank 901689838831</label>
+        <label><input type="radio" name="payment" value="Gopay"> Gopay 082123987146</label>
+        <label><input type="radio" name="payment" value="Dana"> Dana 082123987146</label>
+      </div>
+
+      <label for="proof">Upload Bukti Pembayaran</label>
+      <input type="file" id="proof" accept="image/*">
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('orderForm');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const nama = document.getElementById('name').value;
+      const item = document.getElementById('item').value;
+      const warna = document.getElementById('color').value;
+      const size = document.getElementById('size').value;
+      const alamat = document.getElementById('address').value;
+      const phone = document.getElementById('phone').value;
+      const payment = document.querySelector('input[name="payment"]:checked')?.value || '';
+      const proof = document.getElementById('proof').files[0];
+
+      const message = `Halo WalksCrocs!%0A%0ANama: ${nama}%0AItem: ${item}%0AWarna: ${warna}%0ASize: ${size}%0AAlamat: ${alamat}%0ATelepon: ${phone}%0AMetode Pembayaran: ${payment}`;
+
+      const waURL = `https://wa.me/6285171002907?text=${message}`;
+
+      if (proof) {
+        alert("Mohon kirim bukti pembayaran melalui WhatsApp setelah form ini dikirim.");
+      }
+
+      window.open(waURL, '_blank');
+    });
+  </script>
+</body>
+</html>
