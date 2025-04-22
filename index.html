@@ -10,7 +10,8 @@
   <style>
     body {
       font-family: 'Arial', sans-serif;
-      background-size: 300px;
+      background: #FFFFFF url('logo.png') no-repeat center center;
+      background-size: 500px;
       background-attachment: fixed;
       background-repeat: no-repeat;
       background-position: center;
@@ -64,6 +65,37 @@
       border-radius: 10px;
       border: 1px solid #ccc;
     }
+    .payment-option {
+      background: #e7fbd3;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      margin-top: 0.5rem;
+      cursor: pointer;
+      border: 1px solid #84BD00;
+      transition: background 0.3s;
+    }
+    .payment-option:hover {
+      background: #d3f7a4;
+    }
+    .payment-option.active {
+      background: #c4f08c;
+      font-weight: bold;
+    }
+    .file-upload {
+      padding: 1rem;
+      background: #e8f7d8;
+      border: 2px dashed #84BD00;
+      border-radius: 15px;
+      text-align: center;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    .file-upload:hover {
+      background: #d7f4ba;
+    }
+    .file-upload input {
+      display: none;
+    }
     button {
       margin-top: 2rem;
       width: 100%;
@@ -78,12 +110,6 @@
     }
     button:hover {
       background: #6ea800;
-    }
-    .payment-options {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      padding-left: 1rem;
     }
   </style>
 </head>
@@ -112,15 +138,21 @@
       <input type="text" id="phone" required>
 
       <label>Metode Pembayaran</label>
-      <div class="payment-options">
-        <label><input type="radio" name="payment" value="BCA" required> Transfer ke BCA 5776355166</label>
-        <label><input type="radio" name="payment" value="SeaBank"> Transfer ke SeaBank 901689838831</label>
-        <label><input type="radio" name="payment" value="Gopay"> Gopay 082123987146</label>
-        <label><input type="radio" name="payment" value="Dana"> Dana 082123987146</label>
+      <div id="paymentOptions">
+        <div class="payment-option" data-value="BCA 5776355166 a.n Ilham Ismail Hakim">Transfer ke BCA 5776355166 a.n Ilham Ismail Hakim</div>
+        <div class="payment-option" data-value="SeaBank 901689838831 a.n Ilham Ismail Hakim">Transfer ke SeaBank 901689838831 a.n Ilham Ismail Hakim</div>
+        <div class="payment-option" data-value="Gopay 082123987146">E-Wallet Gopay 082123987146</div>
+        <div class="payment-option" data-value="Dana 082123987146">E-Wallet Dana 082123987146</div>
+        <div class="payment-option" data-value="Cash">Cash</div>
       </div>
 
+      <input type="hidden" id="selectedPayment" name="payment" required>
+
       <label for="proof">Upload Bukti Pembayaran</label>
-      <input type="file" id="proof" accept="image/*">
+      <label class="file-upload" id="uploadLabel">
+        Klik untuk upload gambar bukti pembayaran
+        <input type="file" id="proof" accept="image/*">
+      </label>
 
       <button type="submit">Submit</button>
     </form>
@@ -128,6 +160,16 @@
 
   <script>
     const form = document.getElementById('orderForm');
+    const paymentOptions = document.querySelectorAll('.payment-option');
+    const selectedPayment = document.getElementById('selectedPayment');
+
+    paymentOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        paymentOptions.forEach(opt => opt.classList.remove('active'));
+        option.classList.add('active');
+        selectedPayment.value = option.getAttribute('data-value');
+      });
+    });
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
@@ -138,10 +180,10 @@
       const size = document.getElementById('size').value;
       const alamat = document.getElementById('address').value;
       const phone = document.getElementById('phone').value;
-      const payment = document.querySelector('input[name="payment"]:checked')?.value || '';
       const proof = document.getElementById('proof').files[0];
+      const metode = selectedPayment.value;
 
-      const message = `Halo WalksCrocs!%0A%0ANama: ${nama}%0AItem: ${item}%0AWarna: ${warna}%0ASize: ${size}%0AAlamat: ${alamat}%0ATelepon: ${phone}%0AMetode Pembayaran: ${payment}`;
+      const message = `Halo WalksCrocs!%0A%0ANama: ${nama}%0AItem: ${item}%0AWarna: ${warna}%0ASize: ${size}%0AAlamat: ${alamat}%0ATelepon: ${phone}%0AMetode Pembayaran: ${metode}`;
 
       const waURL = `https://wa.me/6285171002907?text=${message}`;
 
